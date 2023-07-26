@@ -5,13 +5,13 @@
     list-style: none;
     text-transform: capitalize;
 }
-nav{
+/* nav{
     margin: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
-}
+} */
 
 .nav_list{
     min-width: 70%;

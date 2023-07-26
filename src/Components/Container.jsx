@@ -1,29 +1,68 @@
-import { Box, Button, CardMedia } from '@mui/material'
+import { Box, Button, CardMedia, Snackbar, Typography, Alert, Chip, Divider, Card, CardHeader } from '@mui/material'
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import itemContext from '../context/ItemContext';
 
-const Container = ({ image, title, discription,cart,setCart }) => {
-    const handleCart=()=>{
-        setCart((prevCart)=>prevCart+1)
-        console.log(cart)
+const Container = ({ image, title, discription, cart, setCart, setCartItem, cartItem, price }) => {
+    const [open, setOpen] = useState(false)
+    const { state, setState } = useContext(itemContext)
+    const handleCart = (itemObj) => {
+
+        if (state.find((item) => item.title === itemObj.title)) {
+            const sameItem = state.find((item) => item.title === itemObj.title)
+            sameItem.quantity++
+
+
+            console.log(state)
+        }
+        else {
+
+            setCart((prevCart) => prevCart + 1)
+            setOpen(true)
+
+            setState([...state, itemObj])
+
+            console.log(state)
+        }
     }
+    const handleClose = () => setOpen(false);
     return (
-        <Box className="container">
+        <Card variant="outlined" className="container">
             <div className="left">
-                <h2>{title}</h2>
-                <div>
-                    <h5>{discription}</h5>
-                </div>
+                <CardHeader title={title}>
+
+
+                </CardHeader>
+
+                <Typography variant='body1'   >
+
+
+                    price:{price}$
+
+                </Typography>
+                <Typography variant='subtitle2'>
+                    {discription}
+                </Typography>
+
                 <Box>
-                    <Button color='secondary' onClick={handleCart} endIcon={<ShoppingCartRoundedIcon />} variant='contained'>add to cart</Button>
+
+                    <Button color='secondary' onClick={() => handleCart({ title: title, quantity: 1, image: image, price: price, discription: discription })} endIcon={<ShoppingCartRoundedIcon />} variant='contained'>add to cart</Button>
+
+                    <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                            food added to cart 😊
+                        </Alert>
+                    </Snackbar>
                 </Box>
+
+
             </div>
             <div className="right">
-                <CardMedia component='img' image={'https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_1340/Lunch1_vlksgq'} />
-                {/* <img src={image} /> */}
+                <CardMedia component='img' image={image} />
+
 
             </div>
-        </Box>
+        </Card>
     )
 
 
